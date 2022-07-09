@@ -15,7 +15,6 @@ from pages.elements_page import (
 
 
 class TestElements:
-
     class TestTextBox:
         def test_text_box(self, driver):
             text_box_page = TestBoxPage(driver, 'https://demoqa.com/text-box')
