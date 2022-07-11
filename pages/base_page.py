@@ -1,6 +1,7 @@
 from selenium.webdriver.support.ui import WebDriverWait as wait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
+from selenium.webdriver.support.select import Select
 
 
 class BasePage:
@@ -51,3 +52,15 @@ class BasePage:
 
     def switch_to_new_tab(self):
         self.driver.switch_to.window(self.driver.window_handles[1])
+
+    def select_date_by_text(self, element, value):
+        select = Select(self.is_element_visible(element))
+        select.select_by_visible_text(value)
+
+    def select_date_from_list(self, elements, value):
+        dates = self.are_elements_present(elements)
+        for date in dates:
+            if date.text == value:
+                date.click()
+                break
+

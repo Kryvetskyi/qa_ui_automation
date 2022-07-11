@@ -1,6 +1,7 @@
 import random
 from faker import Faker
-from data.data import Person, Color
+from data.data import Person, Color, Date
+from datetime import datetime, timedelta
 
 faker_en = Faker('en_US')
 Faker.seed()
@@ -25,3 +26,18 @@ def generate_color():
     yield Color(
         color_name=['Red', 'Blue', 'Green', 'Yellow', 'Purple', 'Black', 'White', 'Violet', 'Indigo', 'Magenta', 'Aqua']
     )
+
+
+def generate_date():
+    yield Date(
+        year=faker_en.year(),
+        month=faker_en.month_name(),
+        day=faker_en.day_of_month(),
+        time=generate_time(),
+    )
+
+
+def generate_time():
+    current = datetime(2022, 1, 1)  # arbitrary day
+    lst = [f'{current + timedelta(minutes=m):%I:%M}' for m in range(0, 24 * 60, 15)]
+    return random.choice(lst)

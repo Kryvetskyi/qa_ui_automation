@@ -1,4 +1,8 @@
-from pages.widget_page import AccordianPage, AutoCompletePage
+from pages.widget_page import (
+    AccordianPage,
+    AutoCompletePage,
+    DateTimePage,
+)
 
 
 class TestWidget:
@@ -37,3 +41,18 @@ class TestWidget:
             color_for_input, result = auto_complete_page.fill_single_input()
 
             assert color_for_input == result, 'Color was not inputted or not presented.'
+
+    class TestDateTime:
+        def test_date(self, driver):
+            date_time_page = DateTimePage(driver, 'https://demoqa.com/date-picker')
+            date_time_page.open()
+            date_before, date_after = date_time_page.select_date()
+
+            assert date_before != date_after
+
+        def test_date_time(self, driver):
+            date_time_page = DateTimePage(driver, 'https://demoqa.com/date-picker')
+            date_time_page.open()
+            date_time_page.select_date_and_time()
+            date_before, date_after = date_time_page.select_date_and_time()
+            assert date_before != date_after
