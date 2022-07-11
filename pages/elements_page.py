@@ -1,6 +1,5 @@
 import random
 import time
-
 import requests
 import base64
 import os
@@ -16,7 +15,7 @@ from locators.elements_page_locators import (
     RadioButtonPageLocators,
     LinksPageLocators,
     DownloadPageLocators,
-    DynamicPropertiesLocators
+    DynamicPropertiesLocators,
 )
 
 

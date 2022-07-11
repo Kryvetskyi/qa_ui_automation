@@ -13,3 +13,8 @@ class Person:
     cur_addr: str = None
     permanent_addr: str = None
     mobile: str = None
+
+
+@dataclass
+class Color:
+    color_name: list = None
