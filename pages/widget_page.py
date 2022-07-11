@@ -126,3 +126,31 @@ class DateTimePage(BasePage):
         input_after = self.is_element_visible(self._DATE_AND_TME_INPUT)
         date_after = input_after.get_attribute('value')
         return date_before, date_after
+
+
+class SliderPage(BasePage):
+    _SLIDER_INPUT = (By.CSS_SELECTOR, "input[class*='range-slider range-slider--primary']")
+    _SLIDER_VALUE = (By.CSS_SELECTOR, "input[id='sliderValue']")
+
+    def check_slider(self):
+        value_before = self.is_element_visible(self._SLIDER_VALUE).get_attribute('value')
+        num = random.randint(1, 100)
+        slider_input = self.is_element_visible(self._SLIDER_INPUT)
+        self.drag_and_drop_by_offset(slider_input, num,  value_before)
+        value_after = self.is_element_visible(self._SLIDER_VALUE).get_attribute('value')
+        return value_before, value_after
+
+
+class ProgressBarPage(BasePage):
+    _SLIDER_BUTTON = (By.CSS_SELECTOR, "button[id='startStopButton']")
+    _SLIDER_VALUE = (By.CSS_SELECTOR, "div[class='progress-bar bg-info']")
+
+    def check_progress_bar(self):
+        value_before = self.is_element_present(self._SLIDER_VALUE).text
+        if value_before == '':
+            value_before = 0
+        self.is_element_visible(self._SLIDER_BUTTON).click()
+        time.sleep(random.randint(1, 8))
+        self.is_element_visible(self._SLIDER_BUTTON).click()
+        value_after = self.is_element_present(self._SLIDER_VALUE).text
+        return value_before, value_after
