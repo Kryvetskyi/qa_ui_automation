@@ -3,7 +3,10 @@ from pages.widget_page import (
     AutoCompletePage,
     DateTimePage,
     SliderPage,
-    ProgressBarPage
+    ProgressBarPage,
+    TabsPage,
+    ToolTipPage,
+    MenuPage,
 )
 
 
@@ -72,3 +75,47 @@ class TestWidget:
             progress_bar_page.open()
             value_before, value_after = progress_bar_page.check_progress_bar()
             assert value_before != value_after, 'Progress bar value was not changed'
+
+    class TestTabs:
+        def test_tabs(self, driver):
+            tabs_page = TabsPage(driver, 'https://demoqa.com/tabs')
+            tabs_page.open()
+            what, origin, use = tabs_page.check_tabs()
+            assert 'Letraset sheets containing' in what, 'Text from what tab does not match'
+            assert ' 45 BC, making it over 2000 ' in origin, 'Text from origin tab does not match'
+            assert 'ish. Many desktop publishing pac' in use, 'Text from use tab text does not match'
+
+    class TestToolTip:
+        def test_button_tool_tip(self, driver):
+            tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
+            tool_tip.open()
+            button_text = tool_tip.hover_button()
+            assert button_text == 'You hovered over the Button'
+
+        def test_input_tool_tip(self, driver):
+            tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
+            tool_tip.open()
+            input_text = tool_tip.hover_input()
+            assert input_text == 'You hovered over the text field'
+
+        def test_input_contrary(self, driver):
+            tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
+            tool_tip.open()
+            contrary_text = tool_tip.hover_contrary()
+            assert contrary_text == 'You hovered over the Contrary'
+
+        def test_input_1_10_32_text(self, driver):
+            tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
+            tool_tip.open()
+            text_1_10_32 = tool_tip.hover_1_10_32_text()
+            assert text_1_10_32 == 'You hovered over the 1.10.32'
+
+    class TestMenu:
+        def test_menu(self, driver):
+            menu_page = MenuPage(driver, 'https://demoqa.com/menu')
+            menu_page.open()
+            menu = menu_page.check_menu()
+            assert all(menu), 'Not all menu items were listed'
+
+
+

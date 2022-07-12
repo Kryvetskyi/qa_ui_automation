@@ -154,3 +154,60 @@ class ProgressBarPage(BasePage):
         self.is_element_visible(self._SLIDER_BUTTON).click()
         value_after = self.is_element_present(self._SLIDER_VALUE).text
         return value_before, value_after
+
+
+class TabsPage(BasePage):
+    _TAB_WHAT = (By.CSS_SELECTOR, "a[id='demo-tab-what']")
+    _WHAT_CONTENT = (By.CSS_SELECTOR, "div[id='demo-tabpane-what']")
+    _TAB_ORIGIN = (By.CSS_SELECTOR, "a[id='demo-tab-origin']")
+    _ORIGIN_CONTENT = (By.CSS_SELECTOR, "div[id='demo-tabpane-origin']")
+    _TAB_USE = (By.CSS_SELECTOR, "a[id='demo-tab-use']")
+    _USE_CONTENT = (By.CSS_SELECTOR, "div[id='demo-tabpane-use']")
+    _TAB_MORE = (By.CSS_SELECTOR, "a[id='demo-tab-more']")
+    _MORE_CONTENT = (By.CSS_SELECTOR, "div[id='demo-tabpane-more']")
+
+    def check_tabs(self):
+        what = self.is_element_visible(self._WHAT_CONTENT).text
+        self.is_element_visible(self._TAB_ORIGIN).click()
+        origin = self.is_element_visible(self._ORIGIN_CONTENT).text
+        self.is_element_visible(self._TAB_USE).click()
+        use = self.is_element_visible(self._USE_CONTENT).text
+
+        return what, origin, use
+
+
+class ToolTipPage(BasePage):
+    _TOOL_TIP_BUTTON = (By.CSS_SELECTOR, "button[id='toolTipButton']")
+    _TOOL_TIPS_TEXT = (By.CSS_SELECTOR, "div[class='tooltip-inner']")
+    _TOOL_TIP_INPUT = (By.CSS_SELECTOR, "input[id='toolTipTextField']")
+    _TOOL_TIP_CONTRARY = (By.XPATH, "//*[.='Contrary']")
+    _TOOL_TIP_1_10_32 = (By.XPATH, "//*[.='1.10.32']")
+
+    def hover_button(self):
+        self.move_to_element(self.is_element_visible(self._TOOL_TIP_BUTTON))
+        return self.is_element_visible(self._TOOL_TIPS_TEXT).text
+
+    def hover_input(self):
+        self.move_to_element(self._TOOL_TIP_INPUT)
+        return self.is_element_visible(self._TOOL_TIPS_TEXT).text
+
+    def hover_contrary(self):
+        self.move_to_element(self.is_element_visible(self._TOOL_TIP_CONTRARY))
+        return self.is_element_visible(self._TOOL_TIPS_TEXT).text
+
+    def hover_1_10_32_text(self):
+        self.remove_footer()
+        self.move_to_element(self.is_element_visible(self._TOOL_TIP_1_10_32))
+        return self.is_element_visible(self._TOOL_TIPS_TEXT).text
+
+
+class MenuPage(BasePage):
+    _MENU_ITEMS = (By.CSS_SELECTOR, "ul[id='nav'] li a")
+
+    def check_menu(self):
+        items_list = self.are_elements_present(self._MENU_ITEMS)
+        data = []
+        for item in items_list:
+            self.move_to_element(item)
+            data.append(item.text)
+        return data
