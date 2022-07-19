@@ -60,6 +60,7 @@ class TestWidget:
             date_time_page.open()
             date_time_page.select_date_and_time()
             date_before, date_after = date_time_page.select_date_and_time()
+
             assert date_before != date_after, 'Date was not changed'
 
     class TestSlider:

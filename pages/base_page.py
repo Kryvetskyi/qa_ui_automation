@@ -49,11 +49,14 @@ class BasePage:
         action = ActionChains(self.driver)
         action.drag_and_drop_by_offset(element, position_x, position_y).perform()
 
+    def drag_and_drop_to_element(self, which, where):
+        action = ActionChains(self.driver)
+        action.drag_and_drop(which, where).perform()
+
     def move_to_element(self, element):
         action = ActionChains(self.driver)
         action.move_to_element(element)
         action.perform()
-
 
     def remove_footer(self):
         self.driver.execute_script("document.getElementsByTagName('footer')[0].remove();")
