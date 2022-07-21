@@ -9,6 +9,9 @@ class BasePage:
     def __init__(self, driver, url):
         self.driver = driver
         self.url = url
+    #
+    # def test_elements(self, interaction_type: str) -> bool:
+    #     raise Exception("NotImplementedException")
 
     def open(self):
         self.driver.get(self.url)

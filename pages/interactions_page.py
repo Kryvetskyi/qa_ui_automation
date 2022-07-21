@@ -27,12 +27,12 @@ class SortablePage(BasePage):
         where_to_put_element = elements[1]
         self.drag_and_drop_to_element(element_to_change, where_to_put_element)
 
-    def check_if_elements_changed(self, interaction_type: str) -> tuple:
+    def test_elements(self, interaction_type: str) -> bool:
         tab_type, tab_items = self.config[interaction_type]
         elements, items_before = self.get_elements_and_text(tab_type, tab_items)
         self.change_random_position(elements)
         _, items_after = self.get_elements_and_text(tab_type, tab_items)
-        return items_before, items_after
+        return items_before != items_after
 
 
 class SelectablePage(BasePage):
@@ -63,8 +63,43 @@ class SelectablePage(BasePage):
     def click_random_item(elements: list[WebElement]) -> None:
         random.sample(elements, k=1)[0].click()
 
-    def check_selectable(self, actions):
-        tab_type, tab_items, active_item = self.config[actions]
+    def test_elements(self, interaction_type: str) -> bool:
+        tab_type, tab_items, active_item = self.config[interaction_type]
         elements = self.get_elements(tab_type, tab_items)
         self.click_random_item(elements)
         return self.is_element_visible(active_item)
+
+
+class ResizablePage(BasePage):
+    _RESIZABLE = (By.CSS_SELECTOR, "div[id='resizable']")
+    _RESIZABLE_BOX = (By.CSS_SELECTOR, "div[id='resizableBoxWithRestriction']")
+    _RESIZABLE_HANDLE = (By.CSS_SELECTOR,
+                         "div[id='resizable'] span[class='react-resizable-handle react-resizable-handle-se']")
+    _RESIZABLE_BOX_HANDLE = (By.CSS_SELECTOR, "div[id='resizableBoxWithRestriction'] \
+        span[class='react-resizable-handle react-resizable-handle-se']")
+
+    options = {
+        'resizable': (_RESIZABLE, _RESIZABLE_HANDLE),
+        'resizable-box': (_RESIZABLE_BOX, _RESIZABLE_BOX_HANDLE)
+    }
+
+    @staticmethod
+    def get_width_height(value):
+        width = value.split(';')[0].split(':')[1].strip()
+        height = value.split(';')[1].split(':')[1].strip()
+        return width, height
+
+    def get_min_max_size(self, element):
+        size = self.is_element_present(element)
+        return size.get_attribute('style')
+
+    def test_elements(self, box_type: str) -> bool:
+        box, box_item = self.options[box_type]
+
+        self.drag_and_drop_by_offset(self.is_element_present(box_item), 400, 200)
+        max_size = self.get_width_height(self.get_min_max_size(box))
+
+        self.drag_and_drop_by_offset(self.is_element_present(box_item), -400, -200)
+        min_size = self.get_width_height(self.get_min_max_size(box))
+
+        return max_size != min_size
