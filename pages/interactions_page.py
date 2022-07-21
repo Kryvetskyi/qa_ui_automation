@@ -103,3 +103,60 @@ class ResizablePage(BasePage):
         min_size = self.get_width_height(self.get_min_max_size(box))
 
         return max_size != min_size
+
+
+class DroppablePage(BasePage):
+    # simple
+    _SIMPLE_TAB = (By.CSS_SELECTOR, "div[id='droppableExample-tab-simple']")
+    _DRAG_ME_SIMPLE = (By.CSS_SELECTOR, "div[id='draggable']")
+    _DROP_HERE_SIMPLE = (By.CSS_SELECTOR, "#simpleDropContainer #droppable")
+
+    # acceptable
+    _ACCEPT_TAB = (By.CSS_SELECTOR, "a[id='droppableExample-tab-accept']")
+    _ACCEPTABLE = (By.CSS_SELECTOR, "div[id='acceptable']")
+    _NOT_ACCEPTABLE = (By.CSS_SELECTOR, "div[id='notAcceptable']")
+    _DROP_HERE_ACCEPT = (By.CSS_SELECTOR, "#acceptDropContainer #droppable")
+
+    # prevent propagation
+    _PREVENT_TAB = (By.CSS_SELECTOR, "a[id='droppableExample-tab-preventPropogation']")
+    _NOT_GREEDY_BOX_TEXT = (By.CSS_SELECTOR, "div[id='notGreedyInnerDropBox'] p:nth-child(1)")
+    _NOT_GREEDY_BOX = (By.CSS_SELECTOR, "div[id='notGreedyInnerDropBox']")
+    _GREEDY_BOX_TEXT = (By.CSS_SELECTOR, "div[id='greedyDropBox'] p:nth-child(1)")
+    _GREEDY_BOX = (By.CSS_SELECTOR, "div[id='greedyDropBoxInner']")
+    _DRAG_ME_PREVENT = (By.CSS_SELECTOR, "#ppDropContainer #dragBox")
+
+    # revert
+    _REVERT_TAB = (By.CSS_SELECTOR, "a[id='droppableExample-tab-revertable']")
+    _REVERT = (By.CSS_SELECTOR, "div[id='revertable']")
+    _NOT_REVERT = (By.CSS_SELECTOR, "div[id='notRevertable']")
+    _DROP_HERE_PREVENT = (By.CSS_SELECTOR, "#reverttableDropContainer #droppable']")
+
+    def drag_simple(self) -> bool:
+        drag = self.is_element_visible(self._DRAG_ME_SIMPLE)
+        drop = self.is_element_visible(self._DROP_HERE_SIMPLE)
+        self.drag_and_drop_to_element(drag, drop)
+        return drop.text == 'Dropped!'
+
+    def drag_acceptable(self, accept_type):
+        accept_options = {
+            'accept': self._ACCEPTABLE,
+            'not_accept': self._NOT_ACCEPTABLE
+        }
+        self.is_element_clickable(self._ACCEPT_TAB).click()
+        drag = self.is_element_visible(accept_options[accept_type])
+        drop = self.is_element_visible(self._DROP_HERE_ACCEPT)
+        self.drag_and_drop_to_element(drag, drop)
+        return drop.text
+
+    def drag_prevent(self):
+        self.is_element_clickable(self._PREVENT_TAB).click()
+        drag = self.is_element_visible(self._DRAG_ME_PREVENT)
+        not_greedy = self.is_element_visible(self._NOT_GREEDY_BOX)
+        self.drag_and_drop_to_element(drag, not_greedy)
+        not_greedy_text_inner = self.is_element_visible(self._NOT_GREEDY_BOX_TEXT).text
+
+        drop_greedy = self.is_element_visible(self._GREEDY_BOX)
+        self.drag_and_drop_to_element(drag, drop_greedy)
+        greedy_text = self.is_element_visible(self._GREEDY_BOX_TEXT).text
+
+        return not_greedy.text, not_greedy_text_inner, drop_greedy.text, greedy_text

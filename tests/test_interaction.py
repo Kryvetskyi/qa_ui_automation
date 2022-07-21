@@ -1,10 +1,8 @@
-from typing import Type
-
-from pages.base_page import BasePage
 from pages.interactions_page import (
     SortablePage,
     SelectablePage,
     ResizablePage,
+    DroppablePage,
 )
 
 
@@ -31,3 +29,21 @@ class TestInteractions:
             resize_page.open()
             assert resize_page.test_elements('resizable')
             assert resize_page.test_elements('resizable-box')
+
+    class TestDroppable:
+
+        def test_drag_simple(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            assert droppable_page.drag_simple()
+
+        def test_drag_acceptable(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            assert droppable_page.drag_acceptable('not_accept') != 'Dropped!'
+            assert droppable_page.drag_acceptable('accept') == 'Dropped!'
+
+        def test_drag_prevent(self, driver):
+            droppable_page = DroppablePage(driver, 'https://demoqa.com/droppable')
+            droppable_page.open()
+            assert 'Outer droppable' in droppable_page.drag_prevent()
