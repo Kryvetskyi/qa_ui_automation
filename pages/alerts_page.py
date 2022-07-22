@@ -1,17 +1,17 @@
 import random
 import time
+from locators.alerts_frame_windows_locators import BrowserWindowsPageLocators
 from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 
 
 class BrowserWindowsPage(BasePage):
-    TAB = (By.CSS_SELECTOR, "button[id='tabButton']")
-    NEW_TAB = (By.CSS_SELECTOR, "h1[id='sampleHeading']")
+    locators = BrowserWindowsPageLocators()
 
     def check_tab_opened(self):
-        self.is_element_visible(self.TAB).click()
+        self.is_element_visible(self.locators.TAB).click()
         self.switch_to_new_tab()
-        return self.is_element_present(self.NEW_TAB).text
+        return self.is_element_present(self.locators.NEW_TAB).text
 
 
 class AlertPage(BasePage):
