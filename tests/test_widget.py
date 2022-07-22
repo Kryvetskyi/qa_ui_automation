@@ -1,3 +1,4 @@
+import allure
 from pages.widget_page import (
     AccordianPage,
     AutoCompletePage,
@@ -10,9 +11,13 @@ from pages.widget_page import (
 )
 
 
+@allure.suite('Widgets.')
 class TestWidget:
+
+    @allure.feature('Test According.')
     class TestAccordingPage:
 
+        @allure.title('Check accordian text')
         def test_according_widgets(self, driver):
             according_page = AccordianPage(driver, 'https://demoqa.com/accordian')
             according_page.open()
@@ -24,7 +29,10 @@ class TestWidget:
             assert second == 'Where does it come from?' and len(second_content) > 0, 'Incorrect title or text body.'
             assert third == 'Why do we use it?' and len(third_content) > 0, 'Incorrect title or text body.'
 
+    @allure.feature('Test Autocompletion.')
     class TestAutoComplete:
+
+        @allure.title('Check autocompleted color')
         def test_autocomplete_color(self, driver):
             auto_complete_page = AutoCompletePage(driver, 'https://demoqa.com/auto-complete')
             auto_complete_page.open()
@@ -32,6 +40,7 @@ class TestWidget:
 
             assert colors_input == colors_input_result, 'Colors were not inputted or not presented.'
 
+        @allure.title('Check removing color.')
         def test_remove_color(self, driver):
             auto_complete_page = AutoCompletePage(driver, 'https://demoqa.com/auto-complete')
             auto_complete_page.open()
@@ -40,6 +49,7 @@ class TestWidget:
 
             assert colors_before > colors_after
 
+        @allure.title('Check single input')
         def test_single_input(self, driver):
             auto_complete_page = AutoCompletePage(driver, 'https://demoqa.com/auto-complete')
             auto_complete_page.open()
@@ -47,7 +57,10 @@ class TestWidget:
 
             assert color_for_input == result, 'Color was not inputted or not presented.'
 
+    @allure.feature('Test DateTime')
     class TestDateTime:
+
+        @allure.title('Check date.')
         def test_date(self, driver):
             date_time_page = DateTimePage(driver, 'https://demoqa.com/date-picker')
             date_time_page.open()
@@ -55,6 +68,7 @@ class TestWidget:
 
             assert date_before != date_after,'Date was not changed'
 
+        @allure.title('Check date and time.')
         def test_date_time(self, driver):
             date_time_page = DateTimePage(driver, 'https://demoqa.com/date-picker')
             date_time_page.open()
@@ -63,21 +77,30 @@ class TestWidget:
 
             assert date_before != date_after, 'Date was not changed'
 
+    @allure.feature('Test Slide Bar.')
     class TestSlider:
+
+        @allure.title('Check slider.')
         def test_slider(self, driver):
             slider_page = SliderPage(driver, 'https://demoqa.com/slider')
             slider_page.open()
             value_before, value_after = slider_page.check_slider()
             assert value_before != value_after, 'Slider bar value was not changed'
 
+    @allure.feature('Test Progress Bar.')
     class TestProgressBar:
+
+        @allure.title('Check progress bar')
         def test_progress_bar(self, driver):
             progress_bar_page = ProgressBarPage(driver, 'https://demoqa.com/progress-bar')
             progress_bar_page.open()
             value_before, value_after = progress_bar_page.check_progress_bar()
             assert value_before != value_after, 'Progress bar value was not changed'
 
+    @allure.feature('Test Tabs.')
     class TestTabs:
+
+        @allure.title('Check tabs.')
         def test_tabs(self, driver):
             tabs_page = TabsPage(driver, 'https://demoqa.com/tabs')
             tabs_page.open()
@@ -86,37 +109,43 @@ class TestWidget:
             assert ' 45 BC, making it over 2000 ' in origin, 'Text from origin tab does not match'
             assert 'ish. Many desktop publishing pac' in use, 'Text from use tab text does not match'
 
+    @allure.feature('Test Tool Tip.')
     class TestToolTip:
+
+        @allure.title('Check button tool tip.')
         def test_button_tool_tip(self, driver):
             tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
             tool_tip.open()
             button_text = tool_tip.hover_button()
             assert button_text == 'You hovered over the Button'
 
+        @allure.title('Check input tool tip.')
         def test_input_tool_tip(self, driver):
             tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
             tool_tip.open()
             input_text = tool_tip.hover_input()
             assert input_text == 'You hovered over the text field'
 
+        @allure.title('Check input contrary tool tip.')
         def test_input_contrary(self, driver):
             tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
             tool_tip.open()
             contrary_text = tool_tip.hover_contrary()
             assert contrary_text == 'You hovered over the Contrary'
 
+        @allure.title('Check simple text tool tip.')
         def test_input_1_10_32_text(self, driver):
             tool_tip = ToolTipPage(driver, 'https://demoqa.com/tool-tips')
             tool_tip.open()
             text_1_10_32 = tool_tip.hover_1_10_32_text()
             assert text_1_10_32 == 'You hovered over the 1.10.32'
 
+    @allure.feature('Test Menu')
     class TestMenu:
+
+        @allure.title('Check menu.')
         def test_menu(self, driver):
             menu_page = MenuPage(driver, 'https://demoqa.com/menu')
             menu_page.open()
             menu = menu_page.check_menu()
             assert all(menu), 'Not all menu items were listed'
-
-
-
